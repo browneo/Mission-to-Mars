@@ -23,6 +23,8 @@ def scrape():
     mars_soup = bs(mars_html, 'html.parser')
 
     news_title = mars_soup.find('div', class_='content_title').text
+    from time import sleep
+    sleep(1)
     news_p = mars_soup.find('div', class_='article_teaser_body').text
 
     ##################################################################################
@@ -54,7 +56,13 @@ def scrape():
 
     mars_facts = pd.read_html('https://space-facts.com/mars/')
 
-    mars_facts_dict = mars_facts[0].to_dict(orient='list')
+    table = mars_facts[0]
+
+    table.columns = ['Description', 'Value']
+
+    table.set_index('Description', drop=True)
+
+    table = table.to_html()
 
     ##################################################################################
     # Hemispheres Section
@@ -85,7 +93,7 @@ def scrape():
     'Featured Image': featured_image_url,
     'Mars Weather': mars_weather,
     'Hemispheres': hemisphere_image_urls,
-    'Table': mars_facts_dict
+    'Table': table
     }
 
     return scraped_data

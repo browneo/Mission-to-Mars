@@ -13,7 +13,7 @@ collection = db.mission
 # Create route that renders index.html template and finds documents from mongo
 @app.route('/')
 def index():
-    mission = collection.find()
+    mission = collection.find_one()
     # if 'Table' in mission:
     #     table_dict = mission[0]['Table']
     #     df = pd.DataFrame.from_dict(table_dict)
@@ -25,7 +25,8 @@ def index():
 # Create route that will trigger scrape functions
 @app.route('/scrape')
 def scrape():
-    mars_data = scrape_mars.scrape()
+    mission = scrape_mars.scrape()
+    db.mission.drop()
 
     # Combine results into one dictionary
     # forecast = {
@@ -38,7 +39,7 @@ def scrape():
     # }
 
     # Insert forecast into database
-    collection.insert_one(mars_data)
+    collection.insert_one(mission)
 
     # Redirect back to home page
     return redirect('/', code=302)
