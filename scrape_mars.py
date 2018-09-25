@@ -60,7 +60,7 @@ def scrape():
 
     table.columns = ['Description', 'Value']
 
-    table.set_index('Description', drop=True)
+    table = table.set_index('Description', drop=True)
 
     table = table.to_html()
 
